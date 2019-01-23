@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AspNetCoreBoilerPlate.Domain\AspNetCoreBoilerPlate.Domain.csproj" />
+    <ProjectReference Include="..\AspNetCoreBoilerPlate.EFCore\AspNetCoreBoilerPlate.EFCore.csproj" />
   </ItemGroup>
 
 </Project>

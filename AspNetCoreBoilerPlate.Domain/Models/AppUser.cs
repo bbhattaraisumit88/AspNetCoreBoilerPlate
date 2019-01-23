@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 
-namespace AspNetCoreBoilerPlate.Domain
+namespace AspNetCoreBoilerPlate.Domain.Models
 {
     public class AppUser : IdentityUser<Guid>
     {
