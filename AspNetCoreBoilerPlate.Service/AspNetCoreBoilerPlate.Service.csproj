@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interface\" />
-    <Folder Include="Implementation\" />
+    <ProjectReference Include="..\AspNetCoreBoilerPlate.Domain\AspNetCoreBoilerPlate.Domain.csproj" />
+    <ProjectReference Include="..\AspNetCoreBoilerPlate.Infrastructure\AspNetCoreBoilerPlate.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

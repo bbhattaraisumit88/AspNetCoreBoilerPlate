@@ -11,15 +11,14 @@
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AspNetCoreBoilerPlate.Domain\AspNetCoreBoilerPlate.Domain.csproj" />
     <ProjectReference Include="..\AspNetCoreBoilerPlate.EFCore\AspNetCoreBoilerPlate.EFCore.csproj" />
+    <ProjectReference Include="..\AspNetCoreBoilerPlate.Infrastructure\AspNetCoreBoilerPlate.Infrastructure.csproj" />
+    <ProjectReference Include="..\AspNetCoreBoilerPlate.Service\AspNetCoreBoilerPlate.Service.csproj" />
   </ItemGroup>
 
 </Project>

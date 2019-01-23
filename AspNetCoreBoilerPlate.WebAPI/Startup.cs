@@ -1,5 +1,9 @@
 ﻿using AspNetCoreBoilerPlate.Domain.Models;
 using AspNetCoreBoilerPlate.EFCore;
+using AspNetCoreBoilerPlate.Infrastructure.Repositories.Implementation;
+using AspNetCoreBoilerPlate.Infrastructure.Repositories.Interface;
+using AspNetCoreBoilerPlate.Service.Implementation;
+using AspNetCoreBoilerPlate.Service.Interface;
 using AspNetCoreBoilerPlate.WebAPI.IdentityServerConfiguration;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -27,7 +31,8 @@ namespace AspNetCoreBoilerPlate.WebAPI
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                            options.UseSqlServer(Configuration.GetConnectionString("TestConnection")));
-
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IUserService, UserService>();
             services.AddCors();
 
             services.AddIdentity<AppUser, AppRole>()
