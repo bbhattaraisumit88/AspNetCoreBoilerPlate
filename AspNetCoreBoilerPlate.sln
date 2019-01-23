@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreBoilerPlate.EFCor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreBoilerPlate.Infrastructure", "AspNetCoreBoilerPlate.Infrastructure\AspNetCoreBoilerPlate.Infrastructure.csproj", "{E2B844EC-6290-4DFA-8A6D-436A093ABF71}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreBoilerPlate.Service", "AspNetCoreBoilerPlate.Service\AspNetCoreBoilerPlate.Service.csproj", "{478710D1-83E2-44FF-85C4-B4A1CF432418}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{E2B844EC-6290-4DFA-8A6D-436A093ABF71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2B844EC-6290-4DFA-8A6D-436A093ABF71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2B844EC-6290-4DFA-8A6D-436A093ABF71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{478710D1-83E2-44FF-85C4-B4A1CF432418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{478710D1-83E2-44FF-85C4-B4A1CF432418}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{478710D1-83E2-44FF-85C4-B4A1CF432418}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{478710D1-83E2-44FF-85C4-B4A1CF432418}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
