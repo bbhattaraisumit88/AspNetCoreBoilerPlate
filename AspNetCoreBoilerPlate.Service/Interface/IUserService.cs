@@ -12,5 +12,6 @@ namespace AspNetCoreBoilerPlate.Service.Interface
         IEnumerable<UserResponseDTO> GetAllUsers(
        Expression<Func<AppUser, bool>> filter = null,
        Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = null);
+        bool CreateUser(CreateUserDTO userDTO);
     }
 }
