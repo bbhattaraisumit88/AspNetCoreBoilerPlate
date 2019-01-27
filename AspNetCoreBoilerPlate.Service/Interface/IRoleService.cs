@@ -8,6 +8,8 @@ namespace AspNetCoreBoilerPlate.Service.Interface
     {
         IEnumerable<RoleDTO> GetAllRoles();
         IEnumerable<string> GetRoleNamesByRoleId(IEnumerable<Guid> roleId);
-        bool CreateRole(RoleDTO entity);
+        bool CreateRole(CreateRoleDTO entity);
+        bool UpdateRole(RoleDTO entity);
+        bool DeleteRole(Guid roleId);
     }
 }

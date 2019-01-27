@@ -34,10 +34,27 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
             return roles.ToList();
         }
 
-        public bool CreateRole(RoleDTO entity)
+        public bool CreateRole(CreateRoleDTO entity)
         {
             AppRole appRole = new AppRole { Name = entity.Name };
             _uow.RoleRepository.Insert(appRole);
+            return SaveData();
+        }
+
+        public bool UpdateRole(RoleDTO entity)
+        {
+            var roleId = entity.Id;
+            var roleName = entity.Name;
+            AppRole appRole = _uow.RoleRepository.GetAll(x => x.Id == roleId).FirstOrDefault();
+            appRole.Name = roleName;
+            appRole.NormalizedName = roleName.ToUpper();
+            _uow.RoleRepository.Update(appRole);
+            return SaveData();
+        }
+
+        public bool DeleteRole(Guid roleId)
+        {
+            _uow.RoleRepository.Delete(roleId);
             return SaveData();
         }
 
@@ -47,5 +64,6 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
             if (result > 0) return true;
             else return false;
         }
+
     }
 }

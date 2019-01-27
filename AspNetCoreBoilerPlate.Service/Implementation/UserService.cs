@@ -53,7 +53,6 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
                                }).ToList();
             return userList;
         }
-
         public bool CreateUser(CreateUserDTO userDTO)
         {
             try
