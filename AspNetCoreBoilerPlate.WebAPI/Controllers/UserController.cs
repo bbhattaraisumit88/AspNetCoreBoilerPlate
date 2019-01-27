@@ -1,19 +1,25 @@
 ﻿using AspNetCoreBoilerPlate.Domain.DTO.User;
+using AspNetCoreBoilerPlate.Domain.HelperClasses;
 using AspNetCoreBoilerPlate.Domain.Models;
 using AspNetCoreBoilerPlate.Service.Interface;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AspNetCoreBoilerPlate.WebAPI.Controllers
 {
     public class UserController : BaseController
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly UserManager<AppUser> _userManager;
+        public UserController(IUserService userService,
+            UserManager<AppUser> userManager)
         {
             _userService = userService;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -41,20 +47,22 @@ namespace AspNetCoreBoilerPlate.WebAPI.Controllers
 
         [HttpPost]
         [Route("create")]
-        public IActionResult CreateUser([FromBody]CreateUserDTO createUserDTO)
+        public async Task<IActionResult> CreateUser([FromBody]CreateUserDTO createUserDTO)
         {
             try
             {
-                bool result = _userService.CreateUser(createUserDTO);
-                if (result)
+                var user = new AppUser { UserName = createUserDTO.UserName, FirstName = createUserDTO.FirstName, LastName = createUserDTO.LastName, Email = createUserDTO.Email };
+                var result = await _userManager.CreateAsync(user, createUserDTO.Password);
+                var roleNames = _userService.GetRoleNames(createUserDTO.RoleIdList);
+                var claims = _userService.GetClaims(roleNames);
+                if (result.Succeeded)
                 {
-                    return Ok("User Created Successfully.");
-                }
-                else
-                {
-                    return BadRequest("Couldn't Create User");
+                    await _userManager.AddToRolesAsync(user, roleNames);
+                    await _userManager.AddClaimsAsync(user, claims);
+                    return Ok("User Created Successfully");
                 }
 
+                return BadRequest(result.Errors);
             }
             catch (Exception ex)
             {

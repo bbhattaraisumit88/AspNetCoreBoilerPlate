@@ -1,4 +1,5 @@
 ﻿using AspNetCoreBoilerPlate.Domain.DTO.Role;
+using AspNetCoreBoilerPlate.Domain.HelperClasses;
 using AspNetCoreBoilerPlate.Domain.Models;
 using AspNetCoreBoilerPlate.Infrastructure.Repositories.Interface;
 using AspNetCoreBoilerPlate.Service.Interface;

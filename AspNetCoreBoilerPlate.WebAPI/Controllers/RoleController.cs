@@ -1,5 +1,5 @@
 ﻿using AspNetCoreBoilerPlate.Domain.DTO.Role;
-using AspNetCoreBoilerPlate.Domain.Models;
+using AspNetCoreBoilerPlate.Domain.HelperClasses;
 using AspNetCoreBoilerPlate.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

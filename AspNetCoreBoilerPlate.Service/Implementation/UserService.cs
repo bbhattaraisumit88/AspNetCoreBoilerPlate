@@ -1,4 +1,5 @@
 ﻿using AspNetCoreBoilerPlate.Domain.DTO.User;
+using AspNetCoreBoilerPlate.Domain.HelperClasses;
 using AspNetCoreBoilerPlate.Domain.Models;
 using AspNetCoreBoilerPlate.Infrastructure.Repositories.Interface;
 using AspNetCoreBoilerPlate.Service.Interface;
@@ -104,16 +105,24 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
             _uow.UserRepository.Delete(userId);
             return SaveData();
         }
+        public IEnumerable<string> GetRoleNames(ICollection<Guid> roleIds)
+        {
+            return _roleService.GetRoleNamesByRoleId(roleIds);
+        }
+        public IEnumerable<Claim> GetClaims(IEnumerable<string> roles)
+        {
+            foreach (var item in roles)
+            {
+                yield return new Claim(ClaimTypes.Role, item);
+            }
+        }
+
         private IEnumerable<AppUserRole> AddUserRoles(Guid userId, ICollection<Guid> roleIds)
         {
             foreach (var item in roleIds)
             {
                 yield return new AppUserRole { UserId = userId, RoleId = item };
             }
-        }
-        private IEnumerable<string> GetRoleNames(ICollection<Guid> roleIds)
-        {
-            return _roleService.GetRoleNamesByRoleId(roleIds);
         }
         private IEnumerable<AppUserClaim> AddUserClaims(Guid userId, IEnumerable<string> roles)
         {

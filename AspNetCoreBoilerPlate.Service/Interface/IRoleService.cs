@@ -1,5 +1,5 @@
 ﻿using AspNetCoreBoilerPlate.Domain.DTO.Role;
-using AspNetCoreBoilerPlate.Domain.Models;
+using AspNetCoreBoilerPlate.Domain.HelperClasses;
 using System;
 using System.Collections.Generic;
 

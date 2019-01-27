@@ -1,0 +1,18 @@
+{
+  "RoleData": [
+    { "Name": "Admin" },
+    { "Name": "Guest" }
+  ],
+  "UserData": [
+    {
+      "UserName": "admin",
+      "Password": "admin",
+      "Role": "admin"
+    },
+    {
+      "UserName": "guest",
+      "Password": "guest",
+      "Role": "guest"
+    }
+  ]
+}

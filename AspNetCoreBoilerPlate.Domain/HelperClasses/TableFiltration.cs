@@ -1,4 +1,4 @@
-﻿namespace AspNetCoreBoilerPlate.Domain.Models
+﻿namespace AspNetCoreBoilerPlate.Domain.HelperClasses
 {
     public class TableFiltration
     {
