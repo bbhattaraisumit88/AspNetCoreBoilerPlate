@@ -30,6 +30,7 @@ namespace AspNetCoreBoilerPlate.WebAPI.Controllers
                 {
                     return NotFound("No users available.");
                 }
+
             }
             catch (Exception ex)
             {
@@ -87,14 +88,22 @@ namespace AspNetCoreBoilerPlate.WebAPI.Controllers
         [Route("delete/{userId}")]
         public IActionResult DeleteUser(Guid userId)
         {
-            bool result = _userService.DeleteUser(userId);
-            if (result)
+            try
             {
-                return Ok("User Deleted Successfully");
+                bool result = _userService.DeleteUser(userId);
+                if (result)
+                {
+                    return Ok("User Deleted Successfully");
+                }
+                else
+                {
+                    return BadRequest("Couldn't Delete User.");
+                }
+
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("Couldn't Delete User.");
+                return BadRequest(ex.Message);
             }
 
         }
