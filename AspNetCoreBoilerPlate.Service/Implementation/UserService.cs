@@ -22,9 +22,9 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
             _roleService = roleService;
             _claimsPrincipal = httpContextAccessor.HttpContext.User;
         }
-        public IEnumerable<UserResponseDTO> GetAllUsers()
+        public IEnumerable<UserResponseDTO> GetAllUsers(TableFiltration tableFiltration)
         {
-            var userList = (_uow.UserRepository.GetAll()
+            var userList = (_uow.UserRepository.GetAll(null, null, null, tableFiltration.Page, tableFiltration.PageSize)
                                .Join(_uow.UserRoleRepository.GetAll(),
                                      user => user.Id,
                                      userRole => userRole.UserId,

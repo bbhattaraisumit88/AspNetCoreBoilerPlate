@@ -1,4 +1,5 @@
 ﻿using AspNetCoreBoilerPlate.Domain.DTO.User;
+using AspNetCoreBoilerPlate.Domain.Models;
 using AspNetCoreBoilerPlate.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -17,11 +18,11 @@ namespace AspNetCoreBoilerPlate.WebAPI.Controllers
 
         [HttpGet]
         [Route("get/all")]
-        public IActionResult GetAllUsers()
+        public IActionResult GetAllUsers([FromBody]TableFiltration tableFiltration)
         {
             try
             {
-                var userList = _userService.GetAllUsers();
+                var userList = _userService.GetAllUsers(tableFiltration);
                 if (userList.Any())
                 {
                     return Ok(JsonConvert.SerializeObject(userList));
