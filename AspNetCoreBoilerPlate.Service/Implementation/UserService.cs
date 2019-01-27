@@ -3,11 +3,9 @@ using AspNetCoreBoilerPlate.Domain.Models;
 using AspNetCoreBoilerPlate.Infrastructure.Repositories.Interface;
 using AspNetCoreBoilerPlate.Service.Interface;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace AspNetCoreBoilerPlate.Service.Implementation
@@ -15,16 +13,16 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _uow;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly IRoleService _roleService;
         private readonly ClaimsPrincipal _claimsPrincipal;
-        public UserService(IUnitOfWork uow, UserManager<AppUser> userManager,
+        public UserService(IUnitOfWork uow, IRoleService roleService,
             IHttpContextAccessor httpContextAccessor)
         {
             _uow = uow;
-            _userManager = userManager;
+            _roleService = roleService;
             _claimsPrincipal = httpContextAccessor.HttpContext.User;
         }
-        public IEnumerable<UserResponseDTO> GetAllUsers(Expression<Func<AppUser, bool>> filter, Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy)
+        public IEnumerable<UserResponseDTO> GetAllUsers()
         {
             var userList = (_uow.UserRepository.GetAll()
                                .Join(_uow.UserRoleRepository.GetAll(),
@@ -60,7 +58,7 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
         {
             try
             {
-                AppUser entity = new AppUser()
+                AppUser entity = new AppUser
                 {
                     Email = userDTO.Email,
                     FirstName = userDTO.FirstName,
@@ -68,27 +66,59 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
                     UserName = userDTO.UserName
                 };
                 var userRoles = AddUserRoles(entity.Id, userDTO.RoleIdList);
+                var userClaims = AddUserClaims(entity.Id, GetRoleNames(userDTO.RoleIdList));
                 _uow.UserRepository.Insert(entity);
                 _uow.UserRoleRepository.InsertRange(userRoles);
+                _uow.UserClaimRepository.InsertRange(userClaims);
                 return SaveData();
-                //var result = await _userManager.CreateAsync(entity, userDTO.Password);
-                //if (result.Succeeded)
-                //{
-                //    foreach (var item in userDTO.RoleIdList)
-                //    {
-                //        var roleName = _roleService.GetRoleById(item).Name;
-                //        await _userManager.AddToRoleAsync(entity, roleName);
-                //        await _userManager.AddClaimAsync(user, new Claim("role", roleName));
-                //    }
-                //}
-                //return true;
             }
             catch (Exception ex)
             {
                 throw;
             }
         }
+        public bool UpdateUser(UpdateUserDTO userDTO)
+        {
+            try
+            {
+                Guid userId = userDTO.UserId;
+                AppUser entity = _uow.UserRepository.GetAll(x => x.Id == userId).FirstOrDefault();
+                entity.Email = userDTO.Email;
+                entity.FirstName = userDTO.FirstName;
+                entity.LastName = userDTO.LastName;
+                entity.UserName = userDTO.UserName;
+                var userRoleList = _uow.UserRoleRepository.GetAll(q => q.UserId == userId).ToList();
+                var userClaimsList = _uow.UserClaimRepository.GetAll(q => q.UserId == userId).ToList();
+                if (userRoleList.Any())
+                {
+                    _uow.UserRoleRepository.DeleteRange(userRoleList);
+                }
+                if (userClaimsList.Any())
+                {
+                    _uow.UserClaimRepository.DeleteRange(userClaimsList);
+                }
 
+                var userRoles = AddUserRoles(userId, userDTO.RoleIdList);
+                var userClaims = AddUserClaims(userId, GetRoleNames(userDTO.RoleIdList));
+                _uow.UserRepository.Update(entity);
+                _uow.UserRoleRepository.InsertRange(userRoles);
+                _uow.UserClaimRepository.InsertRange(userClaims);
+                return SaveData();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public bool DeleteUser(Guid userId)
+        {
+            var roleIdList = _uow.UserRoleRepository.Find(x => x.UserId == userId)
+                .Select(x => x.RoleId).ToList();
+            _uow.UserRoleRepository.Delete(userId, roleIdList);
+            _uow.UserClaimRepository.Delete(userId);
+            _uow.UserRepository.Delete(userId);
+            return SaveData();
+        }
         private IEnumerable<AppUserRole> AddUserRoles(Guid userId, ICollection<Guid> roleIds)
         {
             foreach (var item in roleIds)
@@ -96,13 +126,22 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
                 yield return new AppUserRole { UserId = userId, RoleId = item };
             }
         }
-
+        private IEnumerable<string> GetRoleNames(ICollection<Guid> roleIds)
+        {
+            return _roleService.GetRoleNamesByRoleId(roleIds);
+        }
+        private IEnumerable<AppUserClaim> AddUserClaims(Guid userId, IEnumerable<string> roles)
+        {
+            foreach (var item in roles)
+            {
+                yield return new AppUserClaim { UserId = userId, ClaimType = ClaimTypes.Role, ClaimValue = item };
+            }
+        }
         public Guid GetCurrentUserId()
         {
             Guid userId = Guid.Parse(_claimsPrincipal.Claims.Where(x => x.Type == "id").FirstOrDefault().Value);
             return userId;
         }
-
         private bool SaveData()
         {
             int result = _uow.SaveChanges();

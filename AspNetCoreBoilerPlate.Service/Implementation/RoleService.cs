@@ -2,6 +2,7 @@
 using AspNetCoreBoilerPlate.Domain.Models;
 using AspNetCoreBoilerPlate.Infrastructure.Repositories.Interface;
 using AspNetCoreBoilerPlate.Service.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,11 +18,19 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
 
         public IEnumerable<RoleDTO> GetAllRoles()
         {
-            var roles = _uow.RoleRepository.GetAll().Select(q => new RoleDTO
-            {
-                Id = q.Id,
-                Name = q.Name
-            });
+            var roles = _uow.RoleRepository.GetAll()
+                .Select(q => new RoleDTO
+                {
+                    Id = q.Id,
+                    Name = q.Name
+                });
+            return roles.ToList();
+        }
+
+        public IEnumerable<string> GetRoleNamesByRoleId(IEnumerable<Guid> roleId)
+        {
+            var roles = _uow.RoleRepository.GetAll(q => roleId.Contains(q.Id))
+                .Select(q => q.Name);
             return roles.ToList();
         }
 
