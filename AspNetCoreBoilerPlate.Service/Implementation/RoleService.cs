@@ -16,9 +16,9 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
             _uow = uow;
         }
 
-        public IEnumerable<RoleDTO> GetAllRoles()
+        public IEnumerable<RoleDTO> GetAllRoles(TableFiltration tableFiltration)
         {
-            var roles = _uow.RoleRepository.GetAll()
+            var roles = _uow.RoleRepository.GetAll(null, null, null, tableFiltration.Page, tableFiltration.PageSize)
                 .Select(q => new RoleDTO
                 {
                     Id = q.Id,
@@ -36,7 +36,8 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
 
         public bool CreateRole(CreateRoleDTO entity)
         {
-            AppRole appRole = new AppRole { Name = entity.Name };
+            var roleName = entity.Name;
+            AppRole appRole = new AppRole { Name = roleName, NormalizedName = roleName.ToUpper() };
             _uow.RoleRepository.Insert(appRole);
             return SaveData();
         }

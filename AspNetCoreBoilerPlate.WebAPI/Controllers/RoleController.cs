@@ -1,4 +1,5 @@
 ﻿using AspNetCoreBoilerPlate.Domain.DTO.Role;
+using AspNetCoreBoilerPlate.Domain.Models;
 using AspNetCoreBoilerPlate.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -17,11 +18,11 @@ namespace AspNetCoreBoilerPlate.WebAPI.Controllers
 
         [HttpGet]
         [Route("get/all")]
-        public IActionResult GetAllRoles()
+        public IActionResult GetAllRoles([FromBody]TableFiltration tableFiltration)
         {
             try
             {
-                var roleList = _roleService.GetAllRoles();
+                var roleList = _roleService.GetAllRoles(tableFiltration);
                 if (roleList.Any())
                 {
                     return Ok(JsonConvert.SerializeObject(roleList));
