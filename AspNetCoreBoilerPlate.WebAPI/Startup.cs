@@ -33,6 +33,7 @@ namespace AspNetCoreBoilerPlate.WebAPI
                            options.UseSqlServer(Configuration.GetConnectionString("TestConnection")));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRoleService, RoleService>();
             services.AddCors();
 
             services.AddIdentity<AppUser, AppRole>()
