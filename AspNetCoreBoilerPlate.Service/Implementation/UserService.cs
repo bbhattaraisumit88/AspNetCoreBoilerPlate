@@ -4,6 +4,7 @@ using AspNetCoreBoilerPlate.Domain.Models;
 using AspNetCoreBoilerPlate.Infrastructure.Repositories.Interface;
 using AspNetCoreBoilerPlate.Service.Interface;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,18 +118,18 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
             }
         }
 
-        private IEnumerable<AppUserRole> AddUserRoles(Guid userId, ICollection<Guid> roleIds)
+        private IEnumerable<IdentityUserRole<Guid>> AddUserRoles(Guid userId, ICollection<Guid> roleIds)
         {
             foreach (var item in roleIds)
             {
-                yield return new AppUserRole { UserId = userId, RoleId = item };
+                yield return new IdentityUserRole<Guid> { UserId = userId, RoleId = item };
             }
         }
-        private IEnumerable<AppUserClaim> AddUserClaims(Guid userId, IEnumerable<string> roles)
+        private IEnumerable<IdentityUserClaim<Guid>> AddUserClaims(Guid userId, IEnumerable<string> roles)
         {
             foreach (var item in roles)
             {
-                yield return new AppUserClaim { UserId = userId, ClaimType = ClaimTypes.Role, ClaimValue = item };
+                yield return new IdentityUserClaim<Guid> { UserId = userId, ClaimType = ClaimTypes.Role, ClaimValue = item };
             }
         }
         public Guid GetCurrentUserId()
