@@ -55,66 +55,52 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
         }
         public bool CreateUser(CreateUserDTO userDTO)
         {
-            try
+            AppUser entity = new AppUser
             {
-                AppUser entity = new AppUser
-                {
-                    Email = userDTO.Email,
-                    FirstName = userDTO.FirstName,
-                    LastName = userDTO.LastName,
-                    UserName = userDTO.UserName
-                };
-                var userRoles = AddUserRoles(entity.Id, userDTO.RoleIdList);
-                var userClaims = AddUserClaims(entity.Id, GetRoleNames(userDTO.RoleIdList));
-                _uow.UserRepository.Insert(entity);
-                _uow.UserRoleRepository.InsertRange(userRoles);
-                _uow.UserClaimRepository.InsertRange(userClaims);
-                return SaveData();
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+                Id = Guid.NewGuid(),
+                Email = userDTO.Email,
+                FirstName = userDTO.FirstName,
+                LastName = userDTO.LastName,
+                UserName = userDTO.UserName
+            };
+            var userRoles = AddUserRoles(entity.Id, userDTO.RoleIdList);
+            var userClaims = AddUserClaims(entity.Id, GetRoleNames(userDTO.RoleIdList));
+            _uow.UserRepository.Insert(entity);
+            _uow.UserRoleRepository.InsertRange(userRoles);
+            _uow.UserClaimRepository.InsertRange(userClaims);
+            return SaveData();
         }
         public bool UpdateUser(UpdateUserDTO userDTO)
         {
-            try
+            Guid userId = userDTO.UserId;
+            AppUser entity = _uow.UserRepository.GetAll(x => x.Id == userId).FirstOrDefault();
+            entity.Email = userDTO.Email;
+            entity.FirstName = userDTO.FirstName;
+            entity.LastName = userDTO.LastName;
+            entity.UserName = userDTO.UserName;
+            var userRoleList = _uow.UserRoleRepository.GetAll(q => q.UserId == userId).ToList();
+            var userClaimsList = _uow.UserClaimRepository.GetAll(q => q.UserId == userId).ToList();
+            if (userRoleList.Any())
             {
-                Guid userId = userDTO.UserId;
-                AppUser entity = _uow.UserRepository.GetAll(x => x.Id == userId).FirstOrDefault();
-                entity.Email = userDTO.Email;
-                entity.FirstName = userDTO.FirstName;
-                entity.LastName = userDTO.LastName;
-                entity.UserName = userDTO.UserName;
-                var userRoleList = _uow.UserRoleRepository.GetAll(q => q.UserId == userId).ToList();
-                var userClaimsList = _uow.UserClaimRepository.GetAll(q => q.UserId == userId).ToList();
-                if (userRoleList.Any())
-                {
-                    _uow.UserRoleRepository.DeleteRange(userRoleList);
-                }
-                if (userClaimsList.Any())
-                {
-                    _uow.UserClaimRepository.DeleteRange(userClaimsList);
-                }
+                _uow.UserRoleRepository.DeleteRange(userRoleList);
+            }
+            if (userClaimsList.Any())
+            {
+                _uow.UserClaimRepository.DeleteRange(userClaimsList);
+            }
 
-                var userRoles = AddUserRoles(userId, userDTO.RoleIdList);
-                var userClaims = AddUserClaims(userId, GetRoleNames(userDTO.RoleIdList));
-                _uow.UserRepository.Update(entity);
-                _uow.UserRoleRepository.InsertRange(userRoles);
-                _uow.UserClaimRepository.InsertRange(userClaims);
-                return SaveData();
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            var userRoles = AddUserRoles(userId, userDTO.RoleIdList);
+            var userClaims = AddUserClaims(userId, GetRoleNames(userDTO.RoleIdList));
+            _uow.UserRepository.Update(entity);
+            _uow.UserRoleRepository.InsertRange(userRoles);
+            _uow.UserClaimRepository.InsertRange(userClaims);
+            return SaveData();
         }
         public bool DeleteUser(Guid userId)
         {
             var roleIdList = _uow.UserRoleRepository.Find(x => x.UserId == userId)
                 .Select(x => x.RoleId).ToList();
             _uow.UserRoleRepository.Delete(userId, roleIdList);
-            _uow.UserClaimRepository.Delete(userId);
             _uow.UserRepository.Delete(userId);
             return SaveData();
         }
