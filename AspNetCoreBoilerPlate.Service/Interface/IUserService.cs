@@ -8,7 +8,7 @@ namespace AspNetCoreBoilerPlate.Service.Interface
 {
     public interface IUserService
     {
-        IEnumerable<UserResponseDTO> GetAllUsers(TableFiltration tableFiltration);
+        IEnumerable<UserResponseDTO> GetAllUsers(TableFilter tableFiltration);
         IEnumerable<string> GetRoleNames(ICollection<Guid> roleIds);
         IEnumerable<Claim> GetClaims(IEnumerable<string> roles);
         bool CreateUser(CreateUserDTO userDTO);

@@ -18,7 +18,7 @@ namespace AspNetCoreBoilerPlate.WebAPI.Controllers
 
         [HttpGet]
         [Route("get/all")]
-        public IActionResult GetAllRoles([FromBody]TableFiltration tableFiltration)
+        public IActionResult GetAllRoles([FromBody]TableFilter tableFiltration)
         {
             try
             {

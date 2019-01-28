@@ -1,6 +1,6 @@
 ﻿namespace AspNetCoreBoilerPlate.Domain.HelperClasses
 {
-    public class TableFiltration
+    public class TableFilter
     {
         public int? Page { get; set; }
         public int? PageSize { get; set; }

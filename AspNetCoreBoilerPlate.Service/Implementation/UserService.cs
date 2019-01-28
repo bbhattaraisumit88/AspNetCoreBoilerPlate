@@ -24,7 +24,7 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
             _roleService = roleService;
             _claimsPrincipal = httpContextAccessor.HttpContext.User;
         }
-        public IEnumerable<UserResponseDTO> GetAllUsers(TableFiltration tableFiltration)
+        public IEnumerable<UserResponseDTO> GetAllUsers(TableFilter tableFiltration)
         {
             var userList = (_uow.UserRepository.GetAll(null, null, null, tableFiltration.Page, tableFiltration.PageSize)
                                .Join(_uow.UserRoleRepository.GetAll(),

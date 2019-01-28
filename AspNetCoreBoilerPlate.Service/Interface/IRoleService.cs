@@ -7,7 +7,7 @@ namespace AspNetCoreBoilerPlate.Service.Interface
 {
     public interface IRoleService
     {
-        IEnumerable<RoleDTO> GetAllRoles(TableFiltration tableFiltration);
+        IEnumerable<RoleDTO> GetAllRoles(TableFilter tableFiltration);
         IEnumerable<string> GetRoleNamesByRoleId(IEnumerable<Guid> roleId);
         bool CreateRole(CreateRoleDTO entity);
         bool UpdateRole(RoleDTO entity);

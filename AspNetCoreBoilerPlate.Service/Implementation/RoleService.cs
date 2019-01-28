@@ -17,7 +17,7 @@ namespace AspNetCoreBoilerPlate.Service.Implementation
             _uow = uow;
         }
 
-        public IEnumerable<RoleDTO> GetAllRoles(TableFiltration tableFiltration)
+        public IEnumerable<RoleDTO> GetAllRoles(TableFilter tableFiltration)
         {
             var roles = _uow.RoleRepository.GetAll(null, null, null, tableFiltration.Page, tableFiltration.PageSize)
                 .Select(q => new RoleDTO
