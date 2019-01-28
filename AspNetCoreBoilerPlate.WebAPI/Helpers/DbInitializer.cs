@@ -1,12 +1,14 @@
 ﻿using AspNetCoreBoilerPlate.Domain.HelperClasses;
 using AspNetCoreBoilerPlate.Domain.Models;
 using AspNetCoreBoilerPlate.EFCore;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -22,7 +24,8 @@ namespace AspNetCoreBoilerPlate.WebAPI.Helpers
                 {
                     var roleManager = serviceProvider.GetRequiredService<RoleManager<AppRole>>();
                     var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
-                    string filePath = Directory.GetCurrentDirectory() + "/Helpers/InitialUser.json";
+                    string path = AppDomain.CurrentDomain.BaseDirectory;
+                    string filePath = path.Replace("\\bin\\Debug\\netcoreapp2.2", "") + "Helpers\\InitialUser.json";
                     using (StreamReader r = new StreamReader(filePath))
                     {
                         string json = r.ReadToEnd();
