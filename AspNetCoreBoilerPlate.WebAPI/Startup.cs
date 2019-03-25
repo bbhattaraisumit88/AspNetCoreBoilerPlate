@@ -35,7 +35,9 @@ namespace AspNetCoreBoilerPlate.WebAPI
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddCors();
-
+            services.AddSwaggerGen(c =>
+               c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Now CFO API", Version = "v1" })
+           );
             services.AddIdentity<AppUser, AppRole>(o =>
             {
                 o.Password.RequireDigit = false;
@@ -94,6 +96,11 @@ namespace AspNetCoreBoilerPlate.WebAPI
             app.UseCors(
                option => option.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
             );
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Now CFO API V1");
+            });
             app.UseMvc();
         }
     }
