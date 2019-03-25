@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
 
 namespace AspNetCoreBoilerPlate.WebAPI
 {
@@ -35,9 +37,23 @@ namespace AspNetCoreBoilerPlate.WebAPI
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddCors();
+            // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
-               c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Now CFO API", Version = "v1" })
-           );
+            {
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Now CFO API", Version = "v1" });
+                var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer", new string[] { }},
+                };
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+                c.AddSecurityRequirement(security);
+            });
             services.AddIdentity<AppUser, AppRole>(o =>
             {
                 o.Password.RequireDigit = false;
